@@ -1,0 +1,27 @@
+{
+  "name": "banking-system",
+  "version": "1.0.0",
+  "description": "نظام إدارة الحسابات المصرفية",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "npx http-server -p 8000 -o",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "banking",
+    "account-management",
+    "javascript",
+    "arabic"
+  ],
+  "author": "فريق التطوير",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+} 

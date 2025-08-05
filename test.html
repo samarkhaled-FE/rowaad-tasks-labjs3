@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار النظام</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>اختبار نظام إدارة الحسابات المصرفية</h1>
+        <div id="testResults"></div>
+        <button onclick="runTests()">تشغيل الاختبارات</button>
+        <button onclick="clearResults()">مسح النتائج</button>
+    </div>
+
+    <script type="module">
+        import { SystemManager } from './js/SystemManager.js';
+        import { ACCOUNT_TYPES } from './js/Constants.js';
+
+        window.system = new SystemManager();
+        window.ACCOUNT_TYPES = ACCOUNT_TYPES;
+
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function runTests() {
+            clearResults();
+            addResult('بدء تشغيل الاختبارات...', 'info');
+
+            try {
+                // اختبار إنشاء المستخدمين
+                addResult('اختبار إنشاء المستخدمين...', 'info');
+                const userId = system.createUser('testuser', 'TestPass123!', 'user');
+                const adminId = system.createUser('testadmin', 'AdminPass123!', 'admin');
+                addResult(`✅ تم إنشاء المستخدمين بنجاح`, 'success');
+
+                // اختبار تسجيل الدخول
+                addResult('اختبار تسجيل الدخول...', 'info');
+                const userSession = system.login('testuser', 'TestPass123!');
+                const adminSession = system.login('testadmin', 'AdminPass123!');
+                addResult(`✅ تم تسجيل الدخول بنجاح`, 'success');
+
+                // اختبار إنشاء الحسابات
+                addResult('اختبار إنشاء الحسابات...', 'info');
+                const account1 = system.createAccount(userSession, 'أحمد', 1000);
+                const account2 = system.createAccount(userSession, 'فاطمة', 500, ACCOUNT_TYPES.SAVINGS);
+                addResult(`✅ تم إنشاء الحسابات بنجاح`, 'success');
+
+                // اختبار الإيداع والسحب
+                addResult('اختبار الإيداع والسحب...', 'info');
+                system.deposit(userSession, account1.accountNumber, 200);
+                system.withdraw(userSession, account1.accountNumber, 100);
+                addResult(`✅ تم الإيداع والسحب بنجاح`, 'success');
+
+                // اختبار التحويل
+                addResult('اختبار التحويل...', 'info');
+                system.transfer(userSession, account1.accountNumber, account2.accountNumber, 50);
+                addResult(`✅ تم التحويل بنجاح`, 'success');
+
+                // اختبار تطبيق الفائدة
+                addResult('اختبار تطبيق الفائدة...', 'info');
+                const interestTxn = system.applyMonthlyInterest(account2.accountNumber);
+                if (interestTxn) {
+                    addResult(`✅ تم تطبيق الفائدة بنجاح`, 'success');
+                } else {
+                    addResult(`ℹ️ لم يتم تطبيق الفائدة (الرصيد أقل من الحد المطلوب)`, 'info');
+                }
+
+                addResult('🎉 جميع الاختبارات نجحت!', 'success');
+
+            } catch (error) {
+                addResult(`❌ خطأ في الاختبار: ${error.message}`, 'error');
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+        }
+
+        window.runTests = runTests;
+        window.clearResults = clearResults;
+    </script>
+</body>
+</html> 

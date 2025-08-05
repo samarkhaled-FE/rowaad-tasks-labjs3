@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الحسابات المصرفية</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="bank-logo">
+                    <i class="fas fa-university"></i>
+                    <h1>البنك الرقمي</h1>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">اسم المستخدم</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">كلمة المرور</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+                </form>
+                <div class="login-footer">
+                    <p>ليس لديك حساب؟ <a href="#" id="showRegister">إنشاء حساب جديد</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة التسجيل -->
+    <div id="registerScreen" class="screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="bank-logo">
+                    <i class="fas fa-university"></i>
+                    <h1>إنشاء حساب جديد</h1>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regUsername">اسم المستخدم</label>
+                        <input type="text" id="regUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">كلمة المرور</label>
+                        <input type="password" id="regPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">نوع المستخدم</label>
+                        <select id="userRole" name="role">
+                            <option value="user">مستخدم عادي</option>
+                            <option value="admin">مدير</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">إنشاء الحساب</button>
+                </form>
+                <div class="login-footer">
+                    <p>لديك حساب بالفعل؟ <a href="#" id="showLogin">تسجيل الدخول</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشاشة الرئيسية -->
+    <div id="mainScreen" class="screen">
+        <!-- شريط التنقل العلوي -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-university"></i>
+                <span>البنك الرقمي</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" data-section="dashboard">لوحة المعلومات</a>
+                <a href="#" class="nav-link" data-section="accounts">الحسابات</a>
+                <a href="#" class="nav-link" data-section="transactions">المعاملات</a>
+                <a href="#" class="nav-link" data-section="transfer">التحويلات</a>
+                <a href="#" class="nav-link admin-only" data-section="admin">إدارة النظام</a>
+            </div>
+            <div class="nav-user">
+                <span id="userInfo">مرحباً، </span>
+                <button id="logoutBtn" class="btn btn-secondary">تسجيل الخروج</button>
+            </div>
+        </nav>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- لوحة المعلومات -->
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-header">
+                    <h2>لوحة المعلومات</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-wallet"></i>
+                            <div class="stat-info">
+                                <h3 id="totalAccounts">0</h3>
+                                <p>إجمالي الحسابات</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div class="stat-info">
+                                <h3 id="totalBalance">$0.00</h3>
+                                <p>إجمالي الرصيد</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-exchange-alt"></i>
+                            <div class="stat-info">
+                                <h3 id="totalTransactions">0</h3>
+                                <p>إجمالي المعاملات</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="quick-actions">
+                        <h3>العمليات السريعة</h3>
+                        <div class="action-buttons">
+                            <button class="action-btn" data-action="createAccount">
+                                <i class="fas fa-plus"></i>
+                                <span>إنشاء حساب جديد</span>
+                            </button>
+                            <button class="action-btn" data-action="deposit">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>إيداع</span>
+                            </button>
+                            <button class="action-btn" data-action="withdraw">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>سحب</span>
+                            </button>
+                            <button class="action-btn" data-action="transfer">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>تحويل</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-transactions">
+                        <h3>آخر المعاملات</h3>
+                        <div id="recentTransactionsList" class="transactions-list">
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم الحسابات -->
+            <section id="accounts" class="content-section">
+                <div class="section-header">
+                    <h2>إدارة الحسابات</h2>
+                    <button class="btn btn-primary" id="createAccountBtn">
+                        <i class="fas fa-plus"></i>
+                        إنشاء حساب جديد
+                    </button>
+                </div>
+                <div id="accountsList" class="accounts-grid">
+                    <!-- سيتم ملؤها بواسطة JavaScript -->
+                </div>
+            </section>
+
+            <!-- قسم المعاملات -->
+            <section id="transactions" class="content-section">
+                <div class="section-header">
+                    <h2>المعاملات</h2>
+                    <div class="transaction-filters">
+                        <select id="transactionTypeFilter">
+                            <option value="">جميع الأنواع</option>
+                            <option value="deposit">إيداع</option>
+                            <option value="withdrawal">سحب</option>
+                            <option value="transfer">تحويل</option>
+                            <option value="interest">فائدة</option>
+                        </select>
+                        <input type="date" id="transactionDateFrom" placeholder="من تاريخ">
+                        <input type="date" id="transactionDateTo" placeholder="إلى تاريخ">
+                        <button class="btn btn-secondary" id="filterTransactions">فلترة</button>
+                    </div>
+                </div>
+                <div id="transactionsTable" class="table-container">
+                    <!-- سيتم ملؤها بواسطة JavaScript -->
+                </div>
+            </section>
+
+            <!-- قسم التحويلات -->
+            <section id="transfer" class="content-section">
+                <div class="section-header">
+                    <h2>تحويل الأموال</h2>
+                </div>
+                <div class="transfer-form-container">
+                    <form id="transferForm" class="transfer-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fromAccount">من الحساب</label>
+                                <select id="fromAccount" name="fromAccount" required>
+                                    <option value="">اختر الحساب</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="toAccount">إلى الحساب</label>
+                                <input type="text" id="toAccount" name="toAccount" placeholder="رقم الحساب المستقبل" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transferAmount">المبلغ</label>
+                            <input type="number" id="transferAmount" name="amount" min="0.01" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">تحويل</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- لوحة المدير -->
+            <section id="admin" class="content-section admin-only">
+                <div class="section-header">
+                    <h2>لوحة إدارة النظام</h2>
+                </div>
+                <div class="admin-content">
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <div class="stat-info">
+                                <h3 id="adminTotalUsers">0</h3>
+                                <p>إجمالي المستخدمين</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="stat-info">
+                                <h3 id="adminSuspiciousActivities">0</h3>
+                                <p>الأنشطة المشبوهة</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-actions">
+                        <h3>إجراءات المدير</h3>
+                        <div class="admin-form">
+                            <div class="form-group">
+                                <label for="adminAccountNumber">رقم الحساب</label>
+                                <input type="text" id="adminAccountNumber" placeholder="أدخل رقم الحساب">
+                            </div>
+                            <div class="admin-buttons">
+                                <button class="btn btn-warning" id="freezeAccountBtn">تجميد الحساب</button>
+                                <button class="btn btn-success" id="unfreezeAccountBtn">فك تجميد الحساب</button>
+                                <button class="btn btn-danger" id="deleteAccountBtn">حذف الحساب</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="suspicious-activities">
+                        <h3>الأنشطة المشبوهة</h3>
+                        <div id="suspiciousActivitiesList" class="activities-list">
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- النوافذ المنبثقة -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody">
+                <!-- محتوى النافذة المنبثقة -->
+            </div>
+        </div>
+    </div>
+
+    <!-- رسائل التنبيه -->
+    <div id="notifications" class="notifications-container">
+        <!-- رسائل التنبيه -->
+    </div>
+
+    <!-- تحميل ملفات JavaScript -->
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
+
